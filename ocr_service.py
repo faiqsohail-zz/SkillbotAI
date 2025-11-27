@@ -22,16 +22,17 @@ def preprocess_image_bytes(image_bytes):
     return img, gray
 
 def run_ocr_on_image(image_bytes, gpu=False):
+    """
+    Returns DataFrame with columns: bbox, text, conf
+    """
     reader = get_reader(gpu=gpu)
     img, gray = preprocess_image_bytes(image_bytes)
     results = reader.readtext(gray, detail=1)
-    # return DataFrame rows with bbox, text, conf
     rows = []
     for bbox, text, conf in results:
         rows.append({"bbox": bbox, "text": text, "conf": float(conf)})
     return pd.DataFrame(rows)
 
-# Robust number extractor
 def extract_number_robust(s):
     s = str(s).replace(",", "")
     m = re.search(r'\d+\.?\d*', s)
@@ -40,25 +41,25 @@ def extract_number_robust(s):
     v = m.group(0)
     return float(v) if '.' in v else int(v)
 
-# Parse marks from OCR DataFrame into Subject / Maximum / Obtained
 def parse_marks_from_ocr_df(ocr_df):
+    """
+    Heuristic parser: scans text items for plausible Subject names and following numbers.
+    Returns DataFrame with Subject | Maximum | Obtained
+    """
     text_list = list(ocr_df['text'].astype(str).values)
     subjects = []
     maximum = []
     obtained = []
-
-    # Very similar logic you had, but simplified and robust
     i = 0
     while i < len(text_list):
         t = text_list[i].strip()
         if not t or len(t) < 2:
             i += 1
             continue
-        # heuristics for subject lines: contain alpha and not "MARKS" header
+        # plausible subject heuristic
         if re.search(r'[A-Za-z]{2,}', t) and "MARK" not in t.upper():
-            # scan next 5 tokens for numbers
             nums = []
-            j = i+1
+            j = i + 1
             scanned = 0
             while j < len(text_list) and scanned < 6 and len(nums) < 2:
                 n = extract_number_robust(text_list[j])
@@ -73,6 +74,17 @@ def parse_marks_from_ocr_df(ocr_df):
                 i = j
                 continue
         i += 1
-
+    if not subjects:
+        # fallback: try any "Subject - Obtained" pattern
+        for t in text_list:
+            parts = re.split(r'[:\-]', t)
+            if len(parts) >= 2:
+                # try extract numbers
+                nums = [extract_number_robust(p) for p in parts]
+                nums = [n for n in nums if n is not None]
+                if len(nums) >= 1:
+                    subjects.append(parts[0].strip())
+                    maximum.append(int(nums[0]) if nums else None)
+                    obtained.append(int(nums[1]) if len(nums) > 1 else None)
     df = pd.DataFrame({"Subject": subjects, "Maximum": maximum, "Obtained": obtained})
     return df
