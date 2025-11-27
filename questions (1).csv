@@ -1,0 +1,31 @@
+id,question,category
+1,Do you enjoy building or repairing things?,R
+2,Do you like working with machines or tools?,R
+3,Would you enjoy working outdoors?,R
+4,Do you like to solve math or science problems?,I
+5,Do you enjoy researching and learning new concepts?,I
+6,Would you like to work in a lab setting?,I
+7,"Do you enjoy creating artwork, music, or writing?",A
+8,"Would you like to design a product, logo, or interior space?",A
+9,Do you enjoy acting or performing?,A
+10,Do you like helping people solve personal problems?,S
+11,Would you enjoy teaching or mentoring others?,S
+12,Do you enjoy working in teams to help people?,S
+13,Do you like taking charge of projects?,E
+14,Do you enjoy convincing people to see your point of view?,E
+15,Would you like to manage or start your own business?,E
+16,Do you enjoy keeping records or organizing files?,C
+17,Would you like to work with numbers or data entry?,C
+18,Do you enjoy tasks that require accuracy and attention to detail?,C
+19,Do you like fixing cars or mechanical equipment?,R
+20,Would you enjoy exploring new scientific ideas?,I
+21,Do you enjoy writing stories or creating designs?,A
+22,Would you like to volunteer at a hospital or social organization?,S
+23,Do you like selling or marketing products?,E
+24,Do you enjoy working with financial data?,C
+25,Would you enjoy operating heavy equipment?,R
+26,Do you like conducting experiments?,I
+27,Do you like photography or videography?,A
+28,Would you enjoy leading a community group?,E
+29,Do you enjoy planning schedules or managing databases?,C
+30,Would you enjoy helping others improve their skills?,S
