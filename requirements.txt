@@ -1,0 +1,8 @@
+streamlit
+supabase
+easyocr
+opencv-python-headless
+pandas
+pytest
+flake8
+python-multipart
